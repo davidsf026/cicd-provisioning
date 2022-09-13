@@ -1,0 +1,115 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarqube-sonarqube
+  labels:
+    app: sonarqube
+    chart: sonarqube-0.1.1
+    release: sonarqube
+    heritage: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarqube
+      release: sonarqube
+  template:
+    metadata:
+      labels:
+        app: sonarqube
+        release: sonarqube
+
+    spec:
+      containers:
+        - name: sonarqube
+          image: "sonarqube:9.5-community"
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - name: http
+              containerPort: 9000
+              protocol: TCP
+          env:
+            - name: SONARQUBE_WEB_JVM_OPTS
+              value: ""
+            - name: SONARQUBE_JDBC_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-sonarqube
+                  key: postgresqlUsername
+            - name: SONARQUBE_JDBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-sonarqube
+                  key: postgresqlPassword
+            - name: SONARQUBE_JDBC_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-sonarqube
+                  key: postgresqlDatabase
+            - name: SONARQUBE_JDBC_URL
+              value: "jdbc:postgresql://postgresql-sonarqube:5432/$(SONARQUBE_JDBC_DATABASE)"
+          livenessProbe:
+            httpGet:
+              path: /sessions/new
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /sessions/new
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            failureThreshold: 6
+          volumeMounts:
+            - mountPath: /opt/sonarqube/conf/
+              name: config
+            - mountPath: /opt/sonarqube/data
+              name: sonarqube
+              subPath: data
+            - mountPath: /opt/sonarqube/extensions/plugins/tmp
+              name: sonarqube
+              subPath: tmp
+            - mountPath: /opt/sonarqube/extensions/downloads
+              name: sonarqube
+              subPath: downloads
+            - mountPath: /opt/sonarqube/extensions/plugins
+              name: sonarqube
+              subPath: plugins
+            - mountPath: /opt/sonarqube/temp
+              name: sonarqube
+              subPath: temp
+            - mountPath: /opt/sonarqube/logs
+              name: sonarqube
+              subPath: logs
+            - mountPath: /tmp
+              name: tmp-dir
+            - name: copy-plugins
+              mountPath: /tmp/scripts
+          resources:
+            {}
+      volumes:
+      - name: config
+        configMap:
+          name: sonarqube-sonarqube-config
+          items:
+          - key: sonar.properties
+            path: sonar.properties
+      - name: install-plugins
+        configMap:
+          name: sonarqube-sonarqube-install-plugins
+          items:
+            - key: install_plugins.sh
+              path: install_plugins.sh
+      - name: copy-plugins
+        configMap:
+          name: sonarqube-sonarqube-copy-plugins
+          defaultMode: 0755
+          items:
+            - key: copy_plugins.sh
+              path: copy_plugins.sh
+      - name: sonarqube
+        persistentVolumeClaim:
+          claimName: sonarqube-sonarqube
+      - name : tmp-dir
+        emptyDir: {}
