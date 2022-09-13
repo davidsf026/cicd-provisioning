@@ -3,8 +3,8 @@
 ## Informations
 - **Desired Version:** https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.6.1.59531.zip
 - Default credentials are:
-	- **User:** admin
-	- **Password:** admin123
+  - **User:** admin
+  - **Password:** admin123
 
 ## Deploy With OC Commands
 
