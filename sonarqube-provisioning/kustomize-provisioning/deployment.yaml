@@ -39,6 +39,17 @@ spec:
               protocol: TCP
             - containerPort: 9000
               protocol: TCP
+          env:
+            - name: SONAR_VERSION
+              value: 7.9.1
+            - name: SONARQUBE_JDBC_USERNAME
+              value: sonar
+            - name: SONARQUBE_JDBC_PASSWORD
+              value: sonar
+            - name: SONARQUBE_JDBC_URL
+              value: jdbc:postgresql://postgresql..svc.cluster.local/sonarqube
+            - name: SONAR_LOG_LEVEL
+              value: INFO
           resources: {}
           volumeMounts:
             - name: sonarqube-1
