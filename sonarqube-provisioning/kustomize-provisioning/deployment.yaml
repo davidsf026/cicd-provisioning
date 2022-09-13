@@ -28,6 +28,17 @@ spec:
         - name: sonarqube-4
           emptyDir: {}
       containers:
+	  - env:
+        - name: SONAR_VERSION
+          value: 7.9.1
+        - name: SONARQUBE_JDBC_USERNAME
+          value: sonar
+        - name: SONARQUBE_JDBC_PASSWORD
+          value: sonar
+        - name: SONARQUBE_JDBC_URL
+          value: jdbc:postgresql://postgresql..svc.cluster.local/sonarqube
+        - name: SONAR_LOG_LEVEL
+          value: INFO
         - name: sonarqube
           image: quay.io/dferreira/sonarqube:7.9.1
           ports:
