@@ -7,8 +7,8 @@
   - **Password:** admin123
 
 ## Image:
-- **Image in Quay.io:** quay.io/dferreira/sonarqube
-- **Version (latest at 2022-09-13):** 7.9.1
+- **Image:** sonarqube
+- **Version (latest at 2022-09-13):** 9.5-community
 
 ## Deploy With Kustomize:
 
