@@ -5,7 +5,7 @@
 
 ## Informations:
  - Nexus dashboard will be accessible in http://nexus-$YOUR_CICD_PROJECT_NAME.apps.middleware.rhbr-lab.com/nexus
- - Default credentials are:
+ - **Default credentials are:**
     - **User:** admin
     - **Password:** admin123
 
