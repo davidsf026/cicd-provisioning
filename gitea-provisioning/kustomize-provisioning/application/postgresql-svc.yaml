@@ -1,11 +1,18 @@
 apiVersion: v1
 kind: Service
 metadata:
-  {{ template "app.labels" }}
+  
+  labels:
+    app: gitea
+    app.kubernetes.io/component: gitea
+    app.kubernetes.io/instance: gitea
+    app.kubernetes.io/name: gitea
+    app.kubernetes.io/part-of: gitea
+    generator: helm
   annotations:
     template.openshift.io/expose-uri: >-
       postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
-  name: {{ .Values.db.name | default "gitea-db" | quote }}
+  name: "gitea-db"
 spec:
   ports:
     - name: postgresql
@@ -14,6 +21,6 @@ spec:
       protocol: TCP
       targetPort: 5432
   selector:
-    name: {{ .Values.db.name | default "gitea-db" | quote }}
+    name: "gitea-db"
   sessionAffinity: None
   type: ClusterIP
