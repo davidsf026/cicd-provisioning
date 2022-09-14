@@ -3,23 +3,30 @@ kind: DeploymentConfig
 metadata:
   annotations:
     template.alpha.openshift.io/wait-for-ready: 'true'
-  {{ template "app.labels" }}
-  name: {{ .Values.db.name | default "gitea-db" | quote }}
+  
+  labels:
+    app: gitea
+    app.kubernetes.io/component: gitea
+    app.kubernetes.io/instance: gitea
+    app.kubernetes.io/name: gitea
+    app.kubernetes.io/part-of: gitea
+    generator: helm
+  name: "gitea-db"
 spec:
   replicas: 1
   selector:
-    name: {{ .Values.db.name | default "gitea-db" | quote }}
+    name: "gitea-db"
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        name: {{ .Values.db.name | default "gitea-db" | quote }}
+        name: "gitea-db"
     spec:
       containers:
         - resources:
             limits:
-              memory: {{ .Values.db.memory_limit | default "512Mi" }}
+              memory: 512Mi
           readinessProbe:
             exec:
               command:
@@ -40,31 +47,31 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: database-user
-                  name: {{ .Values.db.name | default "gitea-db" | quote }}
+                  name: "gitea-db"
             - name: POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: database-password
-                  name: {{ .Values.db.name | default "gitea-db" | quote }}
+                  name: "gitea-db"
             - name: POSTGRESQL_DATABASE
               valueFrom:
                 secretKeyRef:
                   key: database-name
-                  name: {{ .Values.db.name | default "gitea-db" | quote }}
+                  name: "gitea-db"
           ports:
             - containerPort: 5432
               protocol: TCP
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /var/lib/pgsql/data
-              name: {{ .Values.db.name | default "gitea-db" | quote }}
+              name: "gitea-db"
           image: ' '
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       volumes:
-        - name: {{ .Values.db.name | default "gitea-db" | quote }}
+        - name: "gitea-db"
           persistentVolumeClaim:
-            claimName: {{ .Values.db.name | default "gitea-db" | quote }}
+            claimName: "gitea-db"
   triggers:
     - imageChangeParams:
         automatic: true
@@ -72,8 +79,8 @@ spec:
           - postgresql
         from:
           kind: ImageStreamTag
-          name: '{{ .Values.db.imagestream_name | default "postgresql" }}:{{ .Values.db.imagestream_tag | default "latest" }}'
-          namespace: {{ .Values.db.imagestream_namespace | default "openshift" }}
+          name: 'postgresql:latest'
+          namespace: openshift
         lastTriggeredImage: ''
       type: ImageChange
     - type: ConfigChange
