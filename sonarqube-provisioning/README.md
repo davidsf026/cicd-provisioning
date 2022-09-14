@@ -1,10 +1,11 @@
 # SonarQube Provision
 
 ## Informations
-- **Desired Version:** https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.6.1.59531.zip
 - **Default credentials are:**
   - **User:** admin
   - **Password:** admin123
+- **To Do:**
+  - **Desired Version:** https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.6.1.59531.zip
 
 ## Image:
 - **Image:** sonarqube
