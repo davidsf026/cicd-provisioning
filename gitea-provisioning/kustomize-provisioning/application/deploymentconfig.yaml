@@ -2,14 +2,21 @@ apiVersion: apps.openshift.io/v1
 kind: DeploymentConfig
 metadata:
   generation: 1
-  {{ template "app.labels" }}
-  name: {{ template "app.name" }}
+  
+  labels:
+    app: gitea
+    app.kubernetes.io/component: gitea
+    app.kubernetes.io/instance: gitea
+    app.kubernetes.io/name: gitea
+    app.kubernetes.io/part-of: gitea
+    generator: helm
+  name: gitea
 spec:
   replicas: 1
   revisionHistoryLimit: 10
   selector:
-    app: {{ template "app.name" }}
-    deploymentconfig: {{ template "app.name" }}
+    app: gitea
+    deploymentconfig: gitea
   strategy:
     activeDeadlineSeconds: 21600
     resources: {}
@@ -73,7 +80,7 @@ spec:
       volumes:
       - name: gitea-repositories
         persistentVolumeClaim:
-          claimName: "{{ .Release.Name | default "gitea" }}-repositories"
+          claimName: "gitea-repositories"
       - configMap:
           defaultMode: 420
           items:
@@ -90,7 +97,7 @@ spec:
         - gitea
       from:
         kind: ImageStreamTag
-        name: '{{ .Values.imagestream_name | default "gitea" }}:{{ .Values.imagestream_tag | default "latest" }}'
-        namespace: {{ .Release.Namespace }}
+        name: 'gitea:latest'
+        namespace: oqss-cicd
       lastTriggeredImage: ''
     type: ImageChange
