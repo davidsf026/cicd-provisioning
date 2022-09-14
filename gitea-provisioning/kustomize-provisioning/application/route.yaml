@@ -3,12 +3,19 @@ kind: Route
 metadata:
   annotations:
     description: Gitea's HTTP route
-  {{ template "app.labels" }}
-  name: {{ template "app.name" }}
+  
+  labels:
+    app: gitea
+    app.kubernetes.io/component: gitea
+    app.kubernetes.io/instance: gitea
+    app.kubernetes.io/name: gitea
+    app.kubernetes.io/part-of: gitea
+    generator: helm
+  name: gitea
 spec:
-  host: {{ required "You MUST specify the external hostname to be used for the public-facing web page" .Values.hostname }}
+  host: gitea-oqss-cicd.apps.middleware.rhbr-lab.com
   to:
     kind: Service
-    name: {{ template "app.name" }}
+    name: gitea
     weight: 100
   wildcardPolicy: None
