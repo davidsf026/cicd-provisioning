@@ -6,9 +6,9 @@ data:
     RUN_MODE = prod
 
     [security]
-    INTERNAL_TOKEN = {{ .Values.internal_token | default (randAlpha 106) | quote }}
+    INTERNAL_TOKEN = "BIHTXpWreGhJzPKRvaZWDEQjqLAKnRrbQuxSmzTaEyiAjwhBTgODzlkmvPiOBWpDbXRRWmOCqTcLiSCCldgmpXgnhMXIrbcmfglrzXKyRE"
     INSTALL_LOCK   = true
-    SECRET_KEY     = {{ .Values.secret_key | default (randAlpha 8) | quote }}
+    SECRET_KEY     = "fIEYIFIk"
     PASSWORD_COMPLEXITY = off
 
     [oauth2]
@@ -16,19 +16,19 @@ data:
 
     [database]
     DB_TYPE  = postgres
-    HOST     = {{ .Values.db.name | default "gitea-db" }}:{{ .Values.db.port | default "5432" }}
-    NAME     = {{ .Values.db.name | default "gitea-db" }}
-    USER     = {{ .Values.db.user | default "gitea" }}
-    PASSWD   = {{ .Values.db.password | default "gitea" }}
+    HOST     = gitea-db:5432
+    NAME     = gitea-db
+    USER     = gitea
+    PASSWD   = S00perSekretP@ssw0rd
     SSL_MODE = disable
 
     [repository]
     ROOT = /gitea-repositories
 
     [server]
-    ROOT_URL         = https://{{ required "You MUST specify the public-facing hostname" .Values.hostname }}/
-    SSH_DOMAIN       = {{ .Values.hostname }}
-    DOMAIN           = {{ .Values.hostname }}
+    ROOT_URL         = http://gitea-oqss-cicd.apps.middleware.rhbr-lab.com/
+    SSH_DOMAIN       = gitea-oqss-cicd.apps.middleware.rhbr-lab.com
+    DOMAIN           = gitea-oqss-cicd.apps.middleware.rhbr-lab.com
     HTTP_PORT        = 3000
     SSH_PORT         = 2022
     DISABLE_SSH      = true
@@ -74,4 +74,11 @@ data:
 kind: ConfigMap
 metadata:
   name: gitea-config
-  {{ template "app.labels" }}
+  
+  labels:
+    app: gitea
+    app.kubernetes.io/component: gitea
+    app.kubernetes.io/instance: gitea
+    app.kubernetes.io/name: gitea
+    app.kubernetes.io/part-of: gitea
+    generator: helm
