@@ -1,6 +1,9 @@
 resources:
-  - application/persistentvolumeclaim.yaml
-  - application/imagestream.yaml
-  - application/deployment.yaml
+  - application/sa-job.yaml
+  - application/cm-job.yaml
+  - application/pvc.yaml
+  - application/rb-job.yaml
   - application/service.yaml
+  - application/deployment.yaml
+  - application/job.yaml
   - application/route.yaml
