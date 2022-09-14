@@ -1,15 +1,18 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  {{ template "app.labels" }}
-  name: {{ .Values.db.name | default "gitea-db" | quote }}
-{{- if .Values.pvcPolicyKeep }}
-  annotations:
-    "helm.sh/resource-policy": keep
-{{- end }}
+  
+  labels:
+    app: gitea
+    app.kubernetes.io/component: gitea
+    app.kubernetes.io/instance: gitea
+    app.kubernetes.io/name: gitea
+    app.kubernetes.io/part-of: gitea
+    generator: helm
+  name: "gitea-db"
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.db.size | default "1Gi" | quote }}
+      storage: "1Gi"
