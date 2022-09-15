@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - cm-job.yaml
+  - deployment.yaml
+  - job.yaml
+  - pvc.yaml
+  - rb-job.yaml
+  - route.yaml
+  - sa-job.yaml
+  - service.yaml
+
